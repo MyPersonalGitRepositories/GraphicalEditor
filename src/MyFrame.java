@@ -6,7 +6,7 @@ public class MyFrame extends JFrame {
         super.paint(g);
     }
 
-    public MyFrame(String title) {
+    MyFrame(String title) {
         super(title);
     }
 }

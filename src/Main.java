@@ -1,7 +1,5 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -11,26 +9,26 @@ import java.io.IOException;
 
 public class Main {
     // Режим рисования 
-    public static int rezhim = 0;
-    public static int xPad;
-    public static int xf;
-    public static int yf;
-    public static int yPad;
-    public static int thickness;
-    public static boolean pressed = false;
+    private static int rezhim = 0;
+    private static int xPad;
+    private static int xf;
+    private static int yf;
+    private static int yPad;
+    //    public static int thickness;
+    private static boolean pressed = false;
     // текущий цвет
-    public static Color maincolor;
-    public static MyFrame f;
-    public static MyPanel japan;
-    public static JButton colorbutton;
-    public static JColorChooser tcc;
+    private static Color maincolor;
+    private static MyFrame f;
+    private static MyPanel japan;
+    private static JButton colorbutton;
+    static JColorChooser tcc;
     // поверхность рисования
-    public static BufferedImage imag;
+    static BufferedImage imag;
     // если мы загружаем картинку
-    public static boolean loading = false;
-    public static String fileName;
+    private static boolean loading = false;
+    private static String fileName;
 
-    public Main() {
+    private Main() {
 
         f = new MyFrame("Графічний редактор");
         f.setSize(800, 800);
@@ -68,7 +66,7 @@ public class Main {
                         JOptionPane.showMessageDialog(f, "Такого файла не існує");
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(f, "Випадок ввода-вивода");
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
                     }
                 }
             }
@@ -156,66 +154,36 @@ public class Main {
         JToolBar toolbar = new JToolBar("Toolbar", JToolBar.VERTICAL);
 
         JButton penButton = new JButton(new ImageIcon("pen.png"));
-        penButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                rezhim = 0;
-            }
-        });
+        penButton.addActionListener(event -> rezhim = 0);
 
         toolbar.add(penButton);
         JButton brushButton = new JButton(new ImageIcon("brush.png"));
-        brushButton.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                rezhim = 1;
-            }
-        });
+        brushButton.addActionListener(event -> rezhim = 1);
 
         toolbar.add(brushButton);
 
         JButton lasticButton = new JButton(new ImageIcon("lastic.png"));
-        lasticButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                rezhim = 2;
-            }
-        });
+        lasticButton.addActionListener(event -> rezhim = 2);
 
         toolbar.add(lasticButton);
 
         JButton textButton = new JButton(new ImageIcon("text.png"));
-        textButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                rezhim = 3;
-            }
-        });
+        textButton.addActionListener(event -> rezhim = 3);
 
         toolbar.add(textButton);
 
         JButton lineButton = new JButton(new ImageIcon("line.png"));
-        lineButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                rezhim = 4;
-            }
-        });
+        lineButton.addActionListener(event -> rezhim = 4);
 
         toolbar.add(lineButton);
 
         JButton elipsButton = new JButton(new ImageIcon("elips.png"));
-        elipsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                rezhim = 5;
-            }
-        });
+        elipsButton.addActionListener(event -> rezhim = 5);
 
         toolbar.add(elipsButton);
 
         JButton rectButton = new JButton(new ImageIcon("rect.png"));
-        rectButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                rezhim = 6;
-            }
-        });
+        rectButton.addActionListener(event -> rezhim = 6);
 
         toolbar.add(rectButton);
 
@@ -228,128 +196,105 @@ public class Main {
         colorbutton = new JButton();
         colorbutton.setBackground(maincolor);
         colorbutton.setBounds(15, 2, 42, 27);
-        colorbutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                ColorDialog coldi = new ColorDialog(f, "Вибір кольору");
-                coldi.setVisible(true);
-            }
+        colorbutton.addActionListener(event -> {
+            ColorDialog coldi = new ColorDialog(f, "Вибір кольору");
+            coldi.setVisible(true);
         });
         colorbar.add(colorbutton);
 
         JButton redbutton = new JButton();
         redbutton.setBackground(Color.red);
         redbutton.setBounds(80, 5, 55, 15);
-        redbutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.red;
-                colorbutton.setBackground(maincolor);
-            }
+        redbutton.addActionListener(event -> {
+            maincolor = Color.red;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(redbutton);
 
         JButton orangebutton = new JButton();
         orangebutton.setBackground(Color.orange);
         orangebutton.setBounds(140, 5, 55, 15);
-        orangebutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.orange;
-                colorbutton.setBackground(maincolor);
-            }
+        orangebutton.addActionListener(event -> {
+            maincolor = Color.orange;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(orangebutton);
 
         JButton yellowbutton = new JButton();
         yellowbutton.setBackground(Color.yellow);
         yellowbutton.setBounds(200, 5, 55, 15);
-        yellowbutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.yellow;
-                colorbutton.setBackground(maincolor);
-            }
+        yellowbutton.addActionListener(event -> {
+            maincolor = Color.yellow;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(yellowbutton);
 
         JButton greenbutton = new JButton();
         greenbutton.setBackground(Color.green);
         greenbutton.setBounds(260, 5, 55, 15);
-        greenbutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.green;
-                colorbutton.setBackground(maincolor);
-            }
+        greenbutton.addActionListener(event -> {
+            maincolor = Color.green;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(greenbutton);
 
         JButton bluebutton = new JButton();
         bluebutton.setBackground(Color.blue);
         bluebutton.setBounds(320, 5, 55, 15);
-        bluebutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.blue;
-                colorbutton.setBackground(maincolor);
-            }
+        bluebutton.addActionListener(event -> {
+            maincolor = Color.blue;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(bluebutton);
 
         JButton cyanbutton = new JButton();
         cyanbutton.setBackground(Color.cyan);
         cyanbutton.setBounds(380, 5, 55, 15);
-        cyanbutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.cyan;
-                colorbutton.setBackground(maincolor);
-            }
+        cyanbutton.addActionListener(event -> {
+            maincolor = Color.cyan;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(cyanbutton);
         JButton magentabutton = new JButton();
         magentabutton.setBackground(Color.magenta);
         magentabutton.setBounds(440, 5, 55, 15);
-        magentabutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.magenta;
-                colorbutton.setBackground(maincolor);
-            }
+        magentabutton.addActionListener(event -> {
+            maincolor = Color.magenta;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(magentabutton);
 
         JButton whitebutton = new JButton();
         whitebutton.setBackground(Color.white);
         whitebutton.setBounds(500, 5, 55, 15);
-        whitebutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.white;
-                colorbutton.setBackground(maincolor);
-            }
+        whitebutton.addActionListener(event -> {
+            maincolor = Color.white;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(whitebutton);
 
         JButton blackbutton = new JButton();
         blackbutton.setBackground(Color.black);
         blackbutton.setBounds(560, 5, 55, 15);
-        blackbutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                maincolor = Color.black;
-                colorbutton.setBackground(maincolor);
-            }
+        blackbutton.addActionListener(event -> {
+            maincolor = Color.black;
+            colorbutton.setBackground(maincolor);
         });
         colorbar.add(blackbutton);
         colorbar.setLayout(null);
         f.add(colorbar);
 
         tcc = new JColorChooser(maincolor);
-        tcc.getSelectionModel().addChangeListener(new ChangeListener() {
-
-            public void stateChanged(ChangeEvent e) {
-                maincolor = tcc.getColor();
-                colorbutton.setBackground(maincolor);
-            }
+        tcc.getSelectionModel().addChangeListener(e -> {
+            maincolor = tcc.getColor();
+            colorbutton.setBackground(maincolor);
         });
 
         japan.addMouseMotionListener(new MouseMotionAdapter() {
 
             public void mouseDragged(MouseEvent e) {
 
-                if (pressed == true) {
+                if (pressed) {
 
                     Graphics g = imag.getGraphics();
                     Graphics2D g2 = (Graphics2D) g;
@@ -479,7 +424,7 @@ public class Main {
                     //TODO
                     g2.setStroke(new BasicStroke(2.0f));
 
-                    String str = new String("");
+                    String str = "";
                     str += e.getKeyChar();
                     //TODO
                     g2.setFont(new Font("Arial", 0, 15));
@@ -498,10 +443,10 @@ public class Main {
                 // если делаем загрузку, то изменение размеров формы
                 // отрабатываем в коде загрузки
 
-                if (loading == false) {
+                if (!loading) {
                     japan.setSize(f.getWidth() - 40, f.getHeight() - 80);
                     BufferedImage tempImage = new BufferedImage(japan.getWidth(), japan.getHeight(), BufferedImage.TYPE_INT_RGB);
-                    Graphics2D d2 = (Graphics2D) tempImage.createGraphics();
+                    Graphics2D d2 = tempImage.createGraphics();
                     d2.setColor(Color.white);
                     d2.fillRect(0, 0, japan.getWidth(), japan.getHeight());
                     tempImage.setData(imag.getRaster());
@@ -518,11 +463,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new Main();
-            }
-        });
+        SwingUtilities.invokeLater(() -> new Main());
     }
 
 }
