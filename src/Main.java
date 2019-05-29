@@ -44,6 +44,14 @@ public class Main {
         JMenu fileMenu = new JMenu("Файл");
         menuBar.add(fileMenu);
 
+        Action exitAction = new AbstractAction("Вийти") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                f.setVisible(false);
+                System.exit(0);
+            }
+        };
+
         Action loadAction = new AbstractAction("Загрузити") {
 
             public void actionPerformed(ActionEvent event) {
@@ -76,6 +84,9 @@ public class Main {
         };
 
         JMenuItem loadMenu = new JMenuItem(loadAction);
+        JMenuItem exitMenu = new JMenuItem(exitAction);
+
+        fileMenu.add(exitMenu);
         fileMenu.add(loadMenu);
 
         Action saveAction = new AbstractAction("Зберегти") {
