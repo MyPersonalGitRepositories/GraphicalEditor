@@ -14,8 +14,11 @@ public class Main {
     private static int xf;
     private static int yf;
     private static int yPad;
-    //    public static int thickness;
     private static boolean pressed = false;
+    private JSlider slider;
+    private static final int thickness_MIN = 2;
+    private static final int thickness_MAX = 30;
+    private static final int thickness_INIT = 15;
     // текущий цвет
     private static Color maincolor;
     private static MyFrame f;
@@ -63,7 +66,7 @@ public class Main {
                         japan.setSize(imag.getWidth(), imag.getWidth());
                         japan.repaint();
                     } catch (FileNotFoundException ex) {
-                        JOptionPane.showMessageDialog(f, "Такого файла не існує");
+                        JOptionPane.showMessageDialog(f, "Такого файлу не існує");
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(f, "Випадок ввода-вивода");
                     } catch (Exception ignored) {
@@ -155,37 +158,35 @@ public class Main {
 
         JButton penButton = new JButton(new ImageIcon("pen.png"));
         penButton.addActionListener(event -> rezhim = 0);
-
         toolbar.add(penButton);
+
         JButton brushButton = new JButton(new ImageIcon("brush.png"));
         brushButton.addActionListener(event -> rezhim = 1);
-
         toolbar.add(brushButton);
 
         JButton lasticButton = new JButton(new ImageIcon("lastic.png"));
         lasticButton.addActionListener(event -> rezhim = 2);
-
         toolbar.add(lasticButton);
 
         JButton textButton = new JButton(new ImageIcon("text.png"));
         textButton.addActionListener(event -> rezhim = 3);
-
         toolbar.add(textButton);
 
         JButton lineButton = new JButton(new ImageIcon("line.png"));
         lineButton.addActionListener(event -> rezhim = 4);
-
         toolbar.add(lineButton);
 
         JButton elipsButton = new JButton(new ImageIcon("elips.png"));
         elipsButton.addActionListener(event -> rezhim = 5);
-
         toolbar.add(elipsButton);
 
         JButton rectButton = new JButton(new ImageIcon("rect.png"));
         rectButton.addActionListener(event -> rezhim = 6);
-
         toolbar.add(rectButton);
+
+        JButton zalivkaButton = new JButton(new ImageIcon("zalivka.png"));
+        zalivkaButton.addActionListener(event -> rezhim = 7);
+        toolbar.add(zalivkaButton);
 
         toolbar.setBounds(0, 0, 30, f.getHeight());
         f.add(toolbar);
@@ -309,6 +310,13 @@ public class Main {
                         // кисть
                         case 1:
                             //TODO ПОМЕНЯТЬ ШИРЕНУ И СОЗДАТЬ ДЛЯ ЭТОГО НОВЫЙ ФУНКЦИОНАЛ
+//                            slider = new JSlider(JSlider.HORIZONTAL, thickness_MIN, thickness_MAX, thickness_INIT);
+//                            slider.addChangeListener(e1 -> {});
+//                            slider.setMajorTickSpacing(10);
+//                            slider.setMinorTickSpacing(1);
+//                            slider.setPaintTicks(true);
+//                            slider.setPaintLabels(true);
+
                             g2.setStroke(new BasicStroke(3.0f));
                             g2.drawLine(xPad, yPad, e.getX(), e.getY());
                             break;
@@ -317,6 +325,11 @@ public class Main {
                             //TODO
                             g2.setStroke(new BasicStroke(3.0f));
                             g2.setColor(Color.WHITE);
+                            g2.drawLine(xPad, yPad, e.getX(), e.getY());
+                            break;
+                        // заливка
+                        case 7:
+                            g2.setStroke(new BasicStroke(10000.0f));
                             g2.drawLine(xPad, yPad, e.getX(), e.getY());
                             break;
                     }
@@ -358,6 +371,10 @@ public class Main {
                         // чтобы печатать на ней текст
                         japan.requestFocus();
                         break;
+                    //заливка
+                    case 7:
+                        g2.setStroke(new BasicStroke(10000.0f));
+                        g2.drawLine(xPad, yPad, xPad + 1, yPad + 1);
                 }
                 xPad = e.getX();
                 yPad = e.getY();
@@ -409,7 +426,7 @@ public class Main {
             }
         });
         japan.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) {
+            public void keyRelрeased(KeyEvent e) {
                 // устанавливаем фокус для панели,
                 // чтобы печатать на ней текст
                 japan.requestFocus();
