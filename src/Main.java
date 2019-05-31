@@ -41,9 +41,18 @@ public class Main {
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
-//        menuBar.setBounds(0, 0, 800, 30);
         JMenu fileMenu = new JMenu("Файл");
         menuBar.add(fileMenu);
+
+        JMenu infoMenu = new JMenu("Довідка");
+        menuBar.add(infoMenu);
+
+        Action infoAction = new AbstractAction("Ліцензія") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Цією Ліцензією засвідчується право ЛІЦЕНЗІАТА на використання комп‘ютерного програмного забезпечення GraphicalEditor. ");
+            }
+        };
 
         Action exitAction = new AbstractAction("Вийти") {
             @Override
@@ -86,6 +95,9 @@ public class Main {
 
         JMenuItem loadMenu = new JMenuItem(loadAction);
         JMenuItem exitMenu = new JMenuItem(exitAction);
+
+        JMenuItem licenceMenu = new JMenuItem(infoAction);
+        infoMenu.add(licenceMenu);
 
         fileMenu.add(exitMenu);
         fileMenu.add(loadMenu);
@@ -216,9 +228,8 @@ public class Main {
         colorbar.setPreferredSize(Preferences.TOOLBAR_DIMENSION);
         colorbutton.setBackground(maincolor);
         colorbutton.setPreferredSize(Preferences.MAIN_BUTTON_DIMENSION);
-        Border etched = BorderFactory.createEtchedBorder();
-        Border titled = BorderFactory.createLineBorder(Color.DARK_GRAY, 6);
-        colorbutton.setBorder(titled);
+        Border border = BorderFactory.createLineBorder(Color.DARK_GRAY, 6);
+        colorbutton.setBorder(border);
         colorbutton.addActionListener(event -> {
             ColorDialog coldi = new ColorDialog(frame, "Вибір кольору");
             coldi.setVisible(true);
@@ -228,7 +239,6 @@ public class Main {
         JButton redbutton = new JButton();
         redbutton.setBackground(Color.red);
         redbutton.setPreferredSize(Preferences.BUTTON_DIMENSION);
-//        redbutton.setBounds(80, 5, 55, 15);
         redbutton.addActionListener(event -> {
             maincolor = Color.red;
             colorbutton.setBackground(maincolor);
@@ -315,6 +325,14 @@ public class Main {
             colorbutton.setBackground(maincolor);
         });
 
+        slider = new JSlider(2, 100, 2);
+        slider.setMajorTickSpacing(10);
+        slider.setMinorTickSpacing(1);
+
+
+        canvas.add(slider);
+
+
         canvas.addMouseMotionListener(new MouseMotionAdapter() {
 
             public void mouseDragged(MouseEvent e) {
@@ -333,21 +351,12 @@ public class Main {
                             break;
                         // кисть
                         case 1:
-                            //TODO ПОМЕНЯТЬ ШИРЕНУ И СОЗДАТЬ ДЛЯ ЭТОГО НОВЫЙ ФУНКЦИОНАЛ
-//                            slider = new JSlider(JSlider.HORIZONTAL, thickness_MIN, thickness_MAX, thickness_INIT);
-//                            slider.addChangeListener(e1 -> {});
-//                            slider.setMajorTickSpacing(10);
-//                            slider.setMinorTickSpacing(1);
-//                            slider.setPaintTicks(true);
-//                            slider.setPaintLabels(true);
-
-                            g2.setStroke(new BasicStroke(3.0f));
+                            g2.setStroke(new BasicStroke(slider.getValue()));
                             g2.drawLine(xPad, yPad, e.getX(), e.getY());
                             break;
                         // ластик
                         case 2:
-                            //TODO
-                            g2.setStroke(new BasicStroke(3.0f));
+                            g2.setStroke(new BasicStroke(slider.getValue()));
                             g2.setColor(Color.WHITE);
                             g2.drawLine(xPad, yPad, e.getX(), e.getY());
                             break;
@@ -380,12 +389,12 @@ public class Main {
                         break;
                     // кисть
                     case 1:
-                        g2.setStroke(new BasicStroke(3.0f));
+                        g2.setStroke(new BasicStroke(slider.getValue()));
                         g2.drawLine(xPad, yPad, xPad + 1, yPad + 1);
                         break;
                     // ластик
                     case 2:
-                        g2.setStroke(new BasicStroke(3.0f));
+                        g2.setStroke(new BasicStroke(slider.getValue()));
                         g2.setColor(Color.WHITE);
                         g2.drawLine(xPad, yPad, xPad + 1, yPad + 1);
                         break;
@@ -462,15 +471,14 @@ public class Main {
                     Graphics2D g2 = (Graphics2D) g;
                     // установка цвета
                     g2.setColor(maincolor);
-                    //TODO
-                    g2.setStroke(new BasicStroke(2.0f));
+                    g2.setStroke(new BasicStroke(slider.getValue() - ((slider.getValue() / 5))));
 
                     String str = "";
                     str += e.getKeyChar();
                     //TODO
-                    g2.setFont(new Font("Arial", 0, 26));
+                    g2.setFont(new Font("Comic Sans MS", 0, slider.getValue()));
                     g2.drawString(str, xPad, yPad);
-                    xPad += 10;
+                    xPad += slider.getValue() - ((slider.getValue() / 3.3));
                     // устанавливаем фокус для панели,
                     // чтобы печатать на ней текст
                     canvas.requestFocus();
