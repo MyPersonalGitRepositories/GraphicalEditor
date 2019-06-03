@@ -3,7 +3,7 @@ import java.awt.*;
 public class Preferences {
 
     public static final int FRAME_WIDTH = 800;
-    public static final int FRAME_HEIGHT = 800;
+    public static final int FRAME_HEIGHT = 1060;
 
     public static final int MAIN_BUTTON_WIDTH = 150;
     public static final int MAIN_BUTTON_HEIGHT = 64;

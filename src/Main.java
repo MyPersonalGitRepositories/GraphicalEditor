@@ -205,6 +205,11 @@ public class Main {
         brushButton.addActionListener(event -> rezhim = 1);
         toolbar.add(brushButton);
 
+        JButton zalivkaButton = new JButton(new ImageIcon("zalivka.png"));
+        zalivkaButton.setPreferredSize(Preferences.BUTTON_DIMENSION);
+        zalivkaButton.addActionListener(event -> rezhim = 7);
+        toolbar.add(zalivkaButton);
+
         JButton lasticButton = new JButton(new ImageIcon("lastic.png"));
         lasticButton.setPreferredSize(Preferences.BUTTON_DIMENSION);
         lasticButton.addActionListener(event -> rezhim = 2);
@@ -230,10 +235,30 @@ public class Main {
         rectButton.addActionListener(event -> rezhim = 6);
         toolbar.add(rectButton);
 
-        JButton zalivkaButton = new JButton(new ImageIcon("zalivka.png"));
-        zalivkaButton.setPreferredSize(Preferences.BUTTON_DIMENSION);
-        zalivkaButton.addActionListener(event -> rezhim = 7);
-        toolbar.add(zalivkaButton);
+        JButton roundedRect = new JButton(new ImageIcon("roundedRect.png"));
+        roundedRect.setPreferredSize(Preferences.BUTTON_DIMENSION);
+        roundedRect.addActionListener(event -> rezhim = 11);
+        toolbar.add(roundedRect);
+
+        JButton filledElips = new JButton(new ImageIcon("filledElips.png"));
+        filledElips.setPreferredSize(Preferences.BUTTON_DIMENSION);
+        filledElips.addActionListener(event -> rezhim = 9);
+        toolbar.add(filledElips);
+
+        JButton filledRect = new JButton(new ImageIcon("filledRect.png"));
+        filledRect.setPreferredSize(Preferences.BUTTON_DIMENSION);
+        filledRect.addActionListener(event -> rezhim = 10);
+        toolbar.add(filledRect);
+
+        JButton roundedFilledRect = new JButton(new ImageIcon("roundedFilledRect.png"));
+        roundedFilledRect.setPreferredSize(Preferences.BUTTON_DIMENSION);
+        roundedFilledRect.addActionListener(event -> rezhim = 12);
+        toolbar.add(roundedFilledRect);
+
+        JButton cancelButton = new JButton(new ImageIcon("cross.png"));
+        cancelButton.setPreferredSize(Preferences.BUTTON_DIMENSION);
+        cancelButton.addActionListener(event -> rezhim = 8);
+        toolbar.add(cancelButton);
 
         frame.add(toolbar, BorderLayout.WEST);
 
@@ -377,6 +402,15 @@ public class Main {
                             g2.setStroke(new BasicStroke(10000.0f));
                             g2.drawLine(xPad, yPad, e.getX(), e.getY());
                             break;
+                        //удаление
+                        case 8:
+                            if (JOptionPane.showConfirmDialog(null, "Ви дійсно впевнені, що хочете все видалити?", "Видалення", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                                g2.setStroke(new BasicStroke(10000.0f));
+                                g2.setColor(Color.white);
+                                g2.drawLine(xPad, yPad, e.getX(), e.getY());
+                                break;
+                            }
+                            break;
                     }
                     xPad = e.getX();
                     yPad = e.getY();
@@ -420,6 +454,16 @@ public class Main {
                     case 7:
                         g2.setStroke(new BasicStroke(10000.0f));
                         g2.drawLine(xPad, yPad, xPad + 1, yPad + 1);
+                        break;
+                    //удаление
+                    case 8:
+                        if (JOptionPane.showConfirmDialog(null, "Ви дійсно впевнені, що хочете все видалити?", "Видалення", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            g2.setStroke(new BasicStroke(10000.0f));
+                            g2.setColor(Color.white);
+                            g2.drawLine(xPad, yPad, e.getX(), e.getY());
+                            break;
+                        }
+                        break;
                 }
                 xPad = e.getX();
                 yPad = e.getY();
@@ -462,6 +506,22 @@ public class Main {
                     // прямоугольник
                     case 6:
                         g.drawRect(x1, y1, (x2 - x1), (y2 - y1));
+                        break;
+                    case 9:
+                        g.drawOval(x1, y1, (x2 - x1), (y2 - y1));
+                        g.fillOval(x1, y1, (x2 - x1), (y2 - y1));
+                        break;
+                    //заполненый прямоугольник
+                    case 10:
+                        g.drawRect(x1, y1, (x2 - x1), (y2 - y1));
+                        g.fillRect(x1, y1, (x2 - x1), (y2 - y1));
+                        break;
+                    case 11:
+                        g.drawRoundRect(x1, y1, (x2 - x1), (y2 - y1), 20, 20);
+                        break;
+                    case 12:
+                        g.drawRoundRect(x1, y1, (x2 - x1), (y2 - y1), 20, 20);
+                        g.fillRoundRect(x1, y1, (x2 - x1), (y2 - y1), 20, 20);
                         break;
                 }
                 xf = 0;
