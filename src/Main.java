@@ -68,8 +68,9 @@ public class Main {
         Action exitAction = new AbstractAction("Вийти") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setVisible(false);
-                System.exit(0);
+                if (JOptionPane.showConfirmDialog(null, "Ви дійсно впевнені, що хочете закрити вікно програми?", "Вихід", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
             }
         };
 
