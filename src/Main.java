@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
+    private double zoomFactor = 1;
+    private double prevZoomFactor = 1;
+    private boolean zoomer;
     // Режим рисования 
     private static int rezhim = 0;
     private static int xPad;
@@ -17,13 +20,10 @@ public class Main {
     private static int yPad;
     private static boolean pressed = false;
     private JSlider slider;
-    private static final int thickness_MIN = 2;
-    private static final int thickness_MAX = 30;
-    private static final int thickness_INIT = 15;
     // текущий цвет
     private static Color maincolor;
     private static MyFrame frame;
-    private static MyPanel canvas;
+    private static MyPanel panel;
     private static JButton colorbutton;
     static JColorChooser tcc;
     // поверхность рисования
@@ -47,10 +47,21 @@ public class Main {
         JMenu infoMenu = new JMenu("Довідка");
         menuBar.add(infoMenu);
 
+        Action helpAction = new AbstractAction("Допомога") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Якщо у вас виникли будь-які проблеми з роботою програми \"GraphicalEditor\" \n" +
+                        " ви можете звернутися за допомогою до її автора: Підлісного Максима" +
+                        "  \n за контактими: \n" + "\n Почта: p.maxsym@gmail.com " + "\n Телефон: +380964435476 \n");
+            }
+        };
+
         Action infoAction = new AbstractAction("Ліцензія") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Цією Ліцензією засвідчується право ЛІЦЕНЗІАТА на використання комп‘ютерного програмного забезпечення GraphicalEditor. ");
+                JOptionPane.showMessageDialog(null, "Програмне забезпечення: \"GraphicalEditor\"\nАвтор: Підлісний Максим Віталійович\n\n                   " +
+                        "                                                                     " +
+                        "ЛІЦЕНЗІЯ\nЦією Ліцензією засвідчується право ЛІЦЕНЗІАТА на використання програмного забезпечення GraphicalEditor.\n ");
             }
         };
 
@@ -81,8 +92,8 @@ public class Main {
                         imag = ImageIO.read(iF);
                         loading = true;
                         frame.setSize(imag.getWidth() + 40, imag.getWidth() + 80);
-                        canvas.setSize(imag.getWidth(), imag.getWidth());
-                        canvas.repaint();
+                        panel.setSize(imag.getWidth(), imag.getWidth());
+                        panel.repaint();
                     } catch (FileNotFoundException ex) {
                         JOptionPane.showMessageDialog(frame, "Такого файлу не існує");
                     } catch (IOException ex) {
@@ -97,7 +108,10 @@ public class Main {
         JMenuItem exitMenu = new JMenuItem(exitAction);
 
         JMenuItem licenceMenu = new JMenuItem(infoAction);
+        JMenuItem helpMenu = new JMenuItem(helpAction);
+
         infoMenu.add(licenceMenu);
+        infoMenu.add(helpMenu);
 
         fileMenu.add(exitMenu);
         fileMenu.add(loadMenu);
@@ -172,10 +186,10 @@ public class Main {
         JMenuItem saveasMenu = new JMenuItem(saveAsAction);
         fileMenu.add(saveasMenu);
 
-        canvas = new MyPanel();
-        canvas.setBackground(Color.white);
-        canvas.setOpaque(true);
-        frame.add(canvas, BorderLayout.CENTER);
+        panel = new MyPanel();
+        panel.setBackground(Color.white);
+        panel.setOpaque(true);
+        frame.add(panel, BorderLayout.CENTER);
 
         JPanel toolbar = new JPanel();
         toolbar.setPreferredSize(Preferences.TOOLBAR_DIMENSION);
@@ -328,12 +342,9 @@ public class Main {
         slider = new JSlider(2, 100, 2);
         slider.setMajorTickSpacing(10);
         slider.setMinorTickSpacing(1);
+        panel.add(slider, BorderLayout.NORTH);
 
-
-        canvas.add(slider);
-
-
-        canvas.addMouseMotionListener(new MouseMotionAdapter() {
+        panel.addMouseMotionListener(new MouseMotionAdapter() {
 
             public void mouseDragged(MouseEvent e) {
 
@@ -369,11 +380,11 @@ public class Main {
                     xPad = e.getX();
                     yPad = e.getY();
                 }
-                canvas.repaint();
+                panel.repaint();
             }
         });
 
-        canvas.addMouseListener(new MouseAdapter() {
+        panel.addMouseListener(new MouseAdapter() {
 
             public void mouseClicked(MouseEvent e) {
 
@@ -402,7 +413,7 @@ public class Main {
                     case 3:
                         // устанавливаем фокус для панели,
                         // чтобы печатать на ней текст
-                        canvas.requestFocus();
+                        panel.requestFocus();
                         break;
                     //заливка
                     case 7:
@@ -413,7 +424,7 @@ public class Main {
                 yPad = e.getY();
 
                 pressed = true;
-                canvas.repaint();
+                panel.repaint();
             }
             public void mousePressed(MouseEvent e) {
                 xPad = e.getX();
@@ -455,14 +466,14 @@ public class Main {
                 xf = 0;
                 yf = 0;
                 pressed = false;
-                canvas.repaint();
+                panel.repaint();
             }
         });
-        canvas.addKeyListener(new KeyAdapter() {
+        panel.addKeyListener(new KeyAdapter() {
             public void keyRelрeased(KeyEvent e) {
                 // устанавливаем фокус для панели,
                 // чтобы печатать на ней текст
-                canvas.requestFocus();
+                panel.requestFocus();
             }
 
             public void keyTyped(KeyEvent e) {
@@ -475,14 +486,13 @@ public class Main {
 
                     String str = "";
                     str += e.getKeyChar();
-                    //TODO
                     g2.setFont(new Font("Comic Sans MS", 0, slider.getValue()));
                     g2.drawString(str, xPad, yPad);
                     xPad += slider.getValue() - ((slider.getValue() / 3.3));
                     // устанавливаем фокус для панели,
                     // чтобы печатать на ней текст
-                    canvas.requestFocus();
-                    canvas.repaint();
+                    panel.requestFocus();
+                    panel.repaint();
                 }
             }
         });
@@ -493,14 +503,14 @@ public class Main {
                 // отрабатываем в коде загрузки
 
                 if (!loading) {
-                    canvas.setSize(frame.getWidth() - 40, frame.getHeight() - 80);
-                    BufferedImage tempImage = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    panel.setSize(frame.getWidth() - 40, frame.getHeight() - 80);
+                    BufferedImage tempImage = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
                     Graphics2D d2 = tempImage.createGraphics();
                     d2.setColor(Color.white);
-                    d2.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                    d2.fillRect(0, 0, panel.getWidth(), panel.getHeight());
                     tempImage.setData(imag.getRaster());
                     imag = tempImage;
-                    canvas.repaint();
+                    panel.repaint();
                 }
                 loading = false;
             }
