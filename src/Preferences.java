@@ -19,4 +19,5 @@ public class Preferences {
     public static final int TOOLBAR_HEIGHT = 75;
     public static final Dimension TOOLBAR_DIMENSION =
             new Dimension(TOOLBAR_WIDTH, TOOLBAR_HEIGHT);
+
 }

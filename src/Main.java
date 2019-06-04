@@ -37,6 +37,7 @@ public class Main {
         frame = new MyFrame("Графічний редактор");
         frame.setSize(Preferences.FRAME_WIDTH, Preferences.FRAME_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setResizable(false);
         maincolor = Color.black;
 
         JMenuBar menuBar = new JMenuBar();

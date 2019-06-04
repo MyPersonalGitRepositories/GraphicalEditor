@@ -1,6 +1,7 @@
 import javax.swing.filechooser.FileFilter;
 
 class TextFileFilter extends FileFilter {
+
     private String ext;
 
     TextFileFilter(String ext) {
