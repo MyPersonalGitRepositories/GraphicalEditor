@@ -3,15 +3,15 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
-    private double zoomFactor = 1;
-    private double prevZoomFactor = 1;
-    private boolean zoomer;
+    private static int x, y;
     // Режим рисования 
     private static int rezhim = 0;
     private static int xPad;
@@ -52,7 +52,7 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Якщо у вас виникли будь-які проблеми з роботою програми \"GraphicalEditor\" \n" +
                         " ви можете звернутися за допомогою до її автора: Підлісного Максима" +
-                        "  \n за контактими: \n" + "\n Почта: p.maxsym@gmail.com " + "\n Телефон: +380964435476 \n");
+                        "  \n за контактими: \n" + "\n Почта: p.maxsym@gmail.com " + "\n Телефон: +1234567890 \n");
             }
         };
 
@@ -91,9 +91,17 @@ public class Main {
                         jf.addChoosableFileFilter(new TextFileFilter(".png"));
                         jf.addChoosableFileFilter(new TextFileFilter(".jpg"));
                         imag = ImageIO.read(iF);
+                        int w = imag.getWidth();
+                        int h = imag.getHeight();
+                        BufferedImage after = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                        AffineTransform at = new AffineTransform();
+                        at.scale(2.0, 2.0);
+                        AffineTransformOp scaleOp =
+                                new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+                        after = scaleOp.filter(imag, after);
                         loading = true;
-                        frame.setSize(imag.getWidth() + 40, imag.getWidth() + 80);
-                        panel.setSize(imag.getWidth(), imag.getWidth());
+//                        frame.setSize(panel.getWidth(), panel.getWidth());
+//                        panel.setSize(imag.getWidth(), imag.getWidth());
                         panel.repaint();
                     } catch (FileNotFoundException ex) {
                         JOptionPane.showMessageDialog(frame, "Такого файлу не існує");
@@ -577,6 +585,28 @@ public class Main {
             }
         });
 
+        JLabel statusLabel = new JLabel("                                                                                                                                                 " +
+                "X: 0   Y: 0");
+
+        panel.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                x = e.getX();
+                y = e.getY();
+                panel.add(statusLabel, BorderLayout.SOUTH);
+                statusLabel.setText(String.valueOf("                                                                                                                                        " +
+                        "X:" + x + "   Y:" + y));
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                x = e.getX();
+                y = e.getY();
+                panel.add(statusLabel, BorderLayout.SOUTH);
+                statusLabel.setText(String.valueOf("                                                                                                                                        " +
+                        "X:" + x + "   Y:" + y));
+            }
+        });
 
         frame.setVisible(true);
     }
