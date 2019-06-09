@@ -199,7 +199,9 @@ public class Main {
         panel = new MyPanel();
         panel.setBackground(Color.white);
         panel.setOpaque(true);
-        frame.add(panel, BorderLayout.CENTER);
+        panel.setAutoscrolls(true);
+        JScrollPane pane = new JScrollPane(panel);
+        frame.add(pane, BorderLayout.CENTER);
 
         JPanel toolbar = new JPanel();
         toolbar.setPreferredSize(Preferences.TOOLBAR_DIMENSION);
@@ -608,13 +610,20 @@ public class Main {
                         "X:" + x + "   Y:" + y));
             }
         });
-
+        frame.setSize(
+                new Dimension(
+                        Preferences.FRAME_WIDTH - 1,
+                        Preferences.FRAME_WIDTH - 1
+                )
+        );
+        frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
 
-        SwingUtilities.invokeLater(() -> new Main());
+        SwingUtilities.invokeLater(Main::new);
     }
 
 }

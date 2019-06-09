@@ -5,7 +5,12 @@ import java.awt.image.BufferedImage;
 public class MyPanel extends JPanel {
 
     MyPanel() {
-
+        this.setPreferredSize(
+                new Dimension(
+                        Preferences.PANEL_WIDHT,
+                        Preferences.PANEL_HEIGHT
+                )
+        );
     }
 
     public void paintComponent(Graphics g) {
